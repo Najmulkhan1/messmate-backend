@@ -10,6 +10,10 @@ model User {
   updatedAt      DateTime @updatedAt
   canAddBazaar   Boolean  @default(false)
   depositBalance Decimal  @default(0) @db.Decimal(10, 2)
+  isBanned       Boolean  @default(false)
+  banReason      String?
+  bannedAt       DateTime?
+  lastActiveAt   DateTime?
 
   mess          Mess?          @relation(fields: [messId], references: [id])
   messId        String?

@@ -8,10 +8,6 @@ export const createMess = async (userId: string, data: any) => {
     throw new AppError('You are already part of a mess. You cannot create a new one.', 400);
   }
 
-  if (user?.role === 'MEMBER') {
-    throw new AppError('Members cannot create a mess. Ask a manager to add you.', 403);
-  }
-
   // Use a transaction to create the mess and set the creator as the MANAGER
   const result = await prisma.$transaction(async (tx) => {
     const newMess = await tx.mess.create({
@@ -50,13 +46,13 @@ export const getAvailableMesses = async (filters?: {
   const where: any = {};
 
   if (filters?.division) {
-    where.division = { equals: filters.division, mode: 'insensitive' };
+    where.division = filters.division;
   }
   if (filters?.district) {
-    where.district = { equals: filters.district, mode: 'insensitive' };
+    where.district = filters.district;
   }
   if (filters?.subDistrict) {
-    where.subDistrict = { equals: filters.subDistrict, mode: 'insensitive' };
+    where.subDistrict = filters.subDistrict;
   }
   if (filters?.search) {
     where.name = { contains: filters.search, mode: 'insensitive' };

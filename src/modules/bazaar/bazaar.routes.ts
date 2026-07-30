@@ -3,11 +3,12 @@ import * as bazaarController from './bazaar.controller';
 import { validateRequest } from '../../middleware/validate-request';
 import { addBazaarSchema, updateBazaarSchema } from './bazaar.validation';
 import { authenticate } from '../../middleware/auth.middleware';
+import { requireMessAccess } from '../../middleware/rbac.middleware';
 
 const router: Router = Router();
 
-// Protect all bazaar routes
 router.use(authenticate);
+router.use(requireMessAccess);
 
 router.post('/', validateRequest(addBazaarSchema), bazaarController.addBazaar);
 router.get('/', bazaarController.getBazaars);

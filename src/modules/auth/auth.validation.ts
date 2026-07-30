@@ -15,3 +15,12 @@ export const loginSchema = z.object({
     password: z.string().min(6, 'Password must be at least 6 characters'),
   }),
 });
+
+export const updateProfileSchema = z.object({
+  body: z.object({
+    name: z.string().min(2, 'Name must be at least 2 characters').optional(),
+    phone: z.string().optional(),
+    currentPassword: z.string().min(6).optional(),
+    newPassword: z.string().min(6, 'Password must be at least 6 characters').optional(),
+  }),
+});

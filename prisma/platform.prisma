@@ -1,0 +1,25 @@
+model PlatformSettings {
+  id                String   @id @default(uuid())
+  maintenanceMode   Boolean  @default(false)
+  allowRegistration Boolean  @default(true)
+  defaultRent       Decimal  @default(15000) @db.Decimal(10, 2)
+  defaultUtility    Decimal  @default(2000) @db.Decimal(10, 2)
+  platformName      String   @default("MessMate")
+  supportEmail      String   @default("support@messmate.com")
+  updatedAt         DateTime @updatedAt
+  updatedBy         String?
+
+  @@map("platform_settings")
+}
+
+model AdminLog {
+  id        String   @id @default(uuid())
+  adminId   String
+  action    String
+  targetType String
+  targetId  String
+  details   Json?
+  createdAt DateTime @default(now())
+
+  @@map("admin_logs")
+}

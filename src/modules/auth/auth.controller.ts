@@ -33,6 +33,7 @@ export const register = catchAsync(async (req: Request, res: Response) => {
         email: user.email,
         role: user.role,
         avatar: user.avatar,
+        phone: user.phone,
       },
       accessToken,
     },
@@ -53,6 +54,7 @@ export const login = catchAsync(async (req: Request, res: Response) => {
         email: user.email,
         role: user.role,
         avatar: user.avatar,
+        phone: user.phone,
         messId: user.messId,
       },
       accessToken,
@@ -86,6 +88,28 @@ export const getMe = catchAsync(async (req: Request, res: Response) => {
         avatar: user.avatar,
         phone: user.phone,
         mess: user.mess,
+      },
+    },
+  });
+});
+
+export const updateProfile = catchAsync(async (req: Request, res: Response) => {
+  const userId = req.user?.userId;
+  if (!userId) return res.status(401).json({ message: 'Not authenticated' });
+
+  const user = await authService.updateProfile(userId, req.body);
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        avatar: user.avatar,
+        phone: user.phone,
+        messId: user.messId,
       },
     },
   });

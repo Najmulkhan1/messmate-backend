@@ -3,6 +3,30 @@ import prisma from '../../config/database';
 import { AppError } from '../../utils/AppError';
 import { generateTokens } from '../../utils/jwt';
 
+export const updateProfile = async (userId: string, data: { name?: string; phone?: string; currentPassword?: string; newPassword?: string }) => {
+  const user = await prisma.user.findUnique({ where: { id: userId } });
+  if (!user) throw new AppError('User not found', 404);
+
+  const updateData: any = {};
+
+  if (data.name) updateData.name = data.name;
+  if (data.phone !== undefined) updateData.phone = data.phone;
+
+  if (data.newPassword) {
+    if (!data.currentPassword) throw new AppError('Current password is required to set a new password', 400);
+    const isMatch = await bcrypt.compare(data.currentPassword, user.password);
+    if (!isMatch) throw new AppError('Current password is incorrect', 400);
+    updateData.password = await bcrypt.hash(data.newPassword, 12);
+  }
+
+  const updated = await prisma.user.update({
+    where: { id: userId },
+    data: updateData,
+  });
+
+  return updated;
+};
+
 export const registerUser = async (data: any) => {
   const { name, email, password, phone } = data;
 
@@ -13,12 +37,16 @@ export const registerUser = async (data: any) => {
 
   const hashedPassword = await bcrypt.hash(password, 12);
 
+  const userCount = await prisma.user.count();
+  const role = userCount === 0 ? 'ADMIN' : 'MEMBER';
+
   const user = await prisma.user.create({
     data: {
       name,
       email,
       password: hashedPassword,
       phone,
+      role,
     },
   });
 
