@@ -3,18 +3,15 @@ import helmet from 'helmet';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import morgan from 'morgan';
-import { createServer } from 'http';
-import { Server } from 'socket.io';
 import dotenv from 'dotenv';
 import sanitizeHtml from 'sanitize-html';
+
+import routes from './routes';
+import { generalLimiter } from './middleware/rate-limiter';
 
 dotenv.config();
 
 const app: Express = express();
-const httpServer = createServer(app);
-
-import authRoutes from './modules/auth/auth.routes';
-import { generalLimiter } from './middleware/rate-limiter';
 
 // Middleware
 app.use(helmet());
@@ -40,53 +37,7 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 });
 
 // Routes
-app.use('/api/auth', authRoutes);
-
-// Socket.io initialization
-const io = new Server(httpServer, {
-  cors: {
-    origin: process.env.FRONTEND_URL || 'http://localhost:3000',
-    credentials: true,
-  },
-});
-
-io.on('connection', (socket) => {
-  console.log('A user connected:', socket.id);
-  
-  socket.on('disconnect', () => {
-    console.log('User disconnected:', socket.id);
-  });
-});
-
-app.get('/', (req: Request, res: Response) => {
-  res.send(`
-    <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; text-align: center; margin-top: 100px; color: #333;">
-      <h1 style="color: #4CAF50; font-size: 3rem; margin-bottom: 10px;">Welcome to MessMate API! 🚀</h1>
-      <p style="font-size: 1.2rem; color: #666;">Your backend server is up and running perfectly.</p>
-      <div style="margin-top: 30px;">
-        <a href="/api/health" style="background-color: #4CAF50; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-weight: bold; font-size: 1rem; transition: background-color 0.3s;">
-          Check Server Health
-        </a>
-      </div>
-    </div>
-  `);
-});
-
-app.get('/api/health', (req: Request, res: Response) => {
-  const uptimeHours = Math.floor(process.uptime() / 3600);
-  const uptimeMinutes = Math.floor((process.uptime() % 3600) / 60);
-  const uptimeSeconds = Math.floor(process.uptime() % 60);
-  
-  const uptimeString = `${uptimeHours}h ${uptimeMinutes}m ${uptimeSeconds}s`;
-
-  res.status(200).json({ 
-    status: 'ok',
-    message: '🚀 MessMate Backend is running perfectly! All systems go.',
-    timestamp: new Date().toISOString(),
-    uptime: process.uptime(),
-    uptimeFormatted: uptimeString
-  });
-});
+app.use('/', routes);
 
 // Error Handler Middleware
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
@@ -97,12 +48,4 @@ app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   });
 });
 
-const PORT = process.env.PORT || 5000;
-
-if (process.env.NODE_ENV !== 'test') {
-  httpServer.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-  });
-}
-
-export { app, httpServer, io };
+export default app;
