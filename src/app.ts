@@ -59,7 +59,18 @@ io.on('connection', (socket) => {
 });
 
 app.get('/api/health', (req: Request, res: Response) => {
-  res.status(200).json({ status: 'ok', timestamp: new Date().toISOString() });
+  const uptimeHours = Math.floor(process.uptime() / 3600);
+  const uptimeMinutes = Math.floor((process.uptime() % 3600) / 60);
+  const uptimeSeconds = Math.floor(process.uptime() % 60);
+  
+  const uptimeString = `${uptimeHours}h ${uptimeMinutes}m ${uptimeSeconds}s`;
+
+  res.status(200).json({ 
+    status: 'ok', 
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime(),
+    uptimeFormatted: uptimeString
+  });
 });
 
 // Error Handler Middleware
