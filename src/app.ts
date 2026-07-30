@@ -58,6 +58,20 @@ io.on('connection', (socket) => {
   });
 });
 
+app.get('/', (req: Request, res: Response) => {
+  res.send(`
+    <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; text-align: center; margin-top: 100px; color: #333;">
+      <h1 style="color: #4CAF50; font-size: 3rem; margin-bottom: 10px;">Welcome to MessMate API! 🚀</h1>
+      <p style="font-size: 1.2rem; color: #666;">Your backend server is up and running perfectly.</p>
+      <div style="margin-top: 30px;">
+        <a href="/api/health" style="background-color: #4CAF50; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-weight: bold; font-size: 1rem; transition: background-color 0.3s;">
+          Check Server Health
+        </a>
+      </div>
+    </div>
+  `);
+});
+
 app.get('/api/health', (req: Request, res: Response) => {
   const uptimeHours = Math.floor(process.uptime() / 3600);
   const uptimeMinutes = Math.floor((process.uptime() % 3600) / 60);
