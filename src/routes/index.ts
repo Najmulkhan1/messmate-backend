@@ -3,6 +3,7 @@ import authRoutes from '../modules/auth/auth.routes';
 import messRoutes from '../modules/mess/mess.routes';
 import memberRoutes from '../modules/member/member.routes';
 import mealRoutes from '../modules/meal/meal.routes';
+import bazaarRoutes from '../modules/bazaar/bazaar.routes';
 
 const router = Router();
 
@@ -41,5 +42,6 @@ router.use('/api/auth', authRoutes);
 router.use('/api/mess', messRoutes);
 router.use('/api/members', memberRoutes);
 router.use('/api/meals', mealRoutes);
+router.use('/api/bazaars', bazaarRoutes);
 
 export default router;

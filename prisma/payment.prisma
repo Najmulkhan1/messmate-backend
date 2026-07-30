@@ -1,0 +1,18 @@
+model Payment {
+  id         String        @id @default(uuid())
+  amount     Decimal       @db.Decimal(10, 2)
+  method     PaymentMethod @default(CASH)
+  status     PaymentStatus @default(PENDING)
+  verifiedBy String?
+  createdAt  DateTime      @default(now())
+  updatedAt  DateTime      @updatedAt
+
+  member   User        @relation(fields: [memberId], references: [id])
+  memberId String
+  bill     MonthlyBill @relation(fields: [billId], references: [id])
+  billId   String
+
+  @@index([memberId])
+  @@index([billId])
+  @@map("payments")
+}

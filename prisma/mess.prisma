@@ -1,0 +1,18 @@
+model Mess {
+  id          String   @id @default(uuid())
+  name        String
+  address     String?
+  rentAmount  Decimal  @default(0) @db.Decimal(10, 2)
+  utilityCost Decimal  @default(0) @db.Decimal(10, 2)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  manager   User          @relation("MessManager", fields: [managerId], references: [id])
+  managerId String
+  members   User[]
+  meals     Meal[]
+  bazaars   Bazaar[]
+  bills     MonthlyBill[]
+
+  @@map("messes")
+}

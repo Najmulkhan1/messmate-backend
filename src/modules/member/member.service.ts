@@ -58,3 +58,25 @@ export const removeMember = async (managerId: string, memberId: string) => {
 
   return null;
 };
+
+export const toggleBazaarPermission = async (managerId: string, memberId: string, canAddBazaar: boolean) => {
+  const manager = await prisma.user.findUnique({ where: { id: managerId } });
+  
+  if (!manager?.messId || manager.role !== 'MANAGER') {
+    throw new AppError('Only mess managers can change permissions', 403);
+  }
+
+  const member = await prisma.user.findUnique({ where: { id: memberId } });
+  
+  if (!member || member.messId !== manager.messId) {
+    throw new AppError('Member not found in your mess', 404);
+  }
+
+  const updatedMember = await prisma.user.update({
+    where: { id: memberId },
+    data: { canAddBazaar },
+    select: { id: true, name: true, email: true, canAddBazaar: true },
+  });
+
+  return updatedMember;
+};

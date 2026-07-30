@@ -1,0 +1,23 @@
+model MonthlyBill {
+  id          String     @id @default(uuid())
+  month       Int
+  year        Int
+  rent        Decimal    @db.Decimal(10, 2)
+  utilities   Decimal    @db.Decimal(10, 2)
+  totalBazaar Decimal    @db.Decimal(10, 2)
+  totalMeals  Int
+  mealRate    Decimal    @db.Decimal(10, 2)
+  totalAmount Decimal    @db.Decimal(10, 2)
+  status      BillStatus @default(PENDING)
+  pdfUrl      String?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  mess     Mess      @relation(fields: [messId], references: [id])
+  messId   String
+  payments Payment[]
+
+  @@unique([month, year, messId])
+  @@index([messId])
+  @@map("monthly_bills")
+}

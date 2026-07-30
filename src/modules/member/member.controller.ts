@@ -44,3 +44,21 @@ export const removeMember = catchAsync(async (req: Request, res: Response) => {
     message: 'Member removed successfully',
   });
 });
+
+export const toggleBazaarPermission = catchAsync(async (req: Request, res: Response) => {
+  const managerId = req.user!.userId;
+  const memberId = req.params.memberId as string;
+  const { canAddBazaar } = req.body;
+
+  if (typeof canAddBazaar !== 'boolean') {
+    throw new AppError('canAddBazaar must be a boolean', 400);
+  }
+
+  const member = await memberService.toggleBazaarPermission(managerId, memberId, canAddBazaar);
+
+  res.status(200).json({
+    status: 'success',
+    message: 'Member bazaar permission updated successfully',
+    data: { member },
+  });
+});

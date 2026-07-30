@@ -1,0 +1,31 @@
+enum Role {
+  ADMIN
+  MANAGER
+  MEMBER
+}
+
+enum MealType {
+  LUNCH
+  DINNER
+}
+
+enum BillStatus {
+  PENDING
+  GENERATED
+  SENT
+  PAID
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+}
+
+enum PaymentMethod {
+  CASH
+  BKASH
+  NAGAD
+  ROCKET
+  BANK_TRANSFER
+}

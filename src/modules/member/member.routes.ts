@@ -11,5 +11,6 @@ router.use(authenticate);
 router.post('/add', validateRequest(addMemberSchema), memberController.addMember);
 router.get('/', memberController.getMembers);
 router.delete('/:memberId', memberController.removeMember);
+router.patch('/:memberId/bazaar-permission', memberController.toggleBazaarPermission);
 
 export default router;
