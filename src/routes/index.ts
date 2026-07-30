@@ -39,6 +39,10 @@ router.get('/api/health', (req: Request, res: Response) => {
 
 import billRoutes from '../modules/bill/bill.routes';
 import paymentRoutes from '../modules/payment/payment.routes';
+import dashboardRoutes from '../modules/dashboard/dashboard.routes';
+import depositRoutes from '../modules/deposit/deposit.routes';
+import notificationRoutes from '../modules/notification/notification.routes';
+
 // API Routes
 router.use('/api/auth', authRoutes);
 router.use('/api/mess', messRoutes);
@@ -47,5 +51,8 @@ router.use('/api/meals', mealRoutes);
 router.use('/api/bazaars', bazaarRoutes);
 router.use('/api/bills', billRoutes);
 router.use('/api/payments', paymentRoutes);
+router.use('/api/dashboard', dashboardRoutes);
+router.use('/api/deposits', depositRoutes);
+router.use('/api/notifications', notificationRoutes);
 
 export default router;

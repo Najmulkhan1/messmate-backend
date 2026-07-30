@@ -26,18 +26,33 @@ export const addBazaar = async (userId: string, data: any) => {
   return bazaar;
 };
 
-export const getMessBazaars = async (messId: string) => {
-  const bazaars = await prisma.bazaar.findMany({
-    where: { messId },
-    orderBy: { date: 'desc' },
-    include: {
-      buyer: {
-        select: { id: true, name: true, email: true },
-      },
-    },
-  });
+export const getMessBazaars = async (messId: string, startDate?: string, endDate?: string, page: number = 1, limit: number = 10) => {
+  const whereClause: any = { messId };
+  
+  if (startDate || endDate) {
+    whereClause.date = {};
+    if (startDate) whereClause.date.gte = new Date(startDate);
+    if (endDate) whereClause.date.lte = new Date(endDate);
+  }
 
-  return bazaars;
+  const skip = (page - 1) * limit;
+
+  const [bazaars, total] = await Promise.all([
+    prisma.bazaar.findMany({
+      where: whereClause,
+      orderBy: { date: 'desc' },
+      include: {
+        buyer: {
+          select: { id: true, name: true, email: true },
+        },
+      },
+      skip,
+      take: limit,
+    }),
+    prisma.bazaar.count({ where: whereClause })
+  ]);
+
+  return { bazaars, total, page, limit, totalPages: Math.ceil(total / limit) };
 };
 
 export const updateBazaar = async (userId: string, bazaarId: string, data: any) => {

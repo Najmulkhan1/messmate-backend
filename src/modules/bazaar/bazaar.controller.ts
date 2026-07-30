@@ -17,18 +17,21 @@ export const addBazaar = catchAsync(async (req: Request, res: Response) => {
 
 export const getBazaars = catchAsync(async (req: Request, res: Response) => {
   const userId = req.user!.userId;
+  const { startDate, endDate, page, limit } = req.query;
   const user = await prisma.user.findUnique({ where: { id: userId } });
   
   if (!user?.messId) {
     throw new AppError('You are not part of any mess', 400);
   }
 
-  const bazaars = await bazaarService.getMessBazaars(user.messId);
+  const p = page ? Number(page) : 1;
+  const l = limit ? Number(limit) : 10;
+
+  const result = await bazaarService.getMessBazaars(user.messId, startDate as string, endDate as string, p, l);
 
   res.status(200).json({
     status: 'success',
-    results: bazaars.length,
-    data: { bazaars },
+    data: result,
   });
 });
 

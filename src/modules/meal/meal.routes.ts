@@ -10,5 +10,6 @@ router.use(authenticate);
 
 router.post('/', validateRequest(addMealSchema), mealController.logMeal);
 router.get('/', mealController.getMeals);
+router.patch('/:id/toggle', mealController.toggleMeal);
 
 export default router;

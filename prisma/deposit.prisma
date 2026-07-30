@@ -1,0 +1,15 @@
+model Deposit {
+  id        String   @id @default(uuid())
+  amount    Decimal  @db.Decimal(10, 2)
+  date      DateTime @default(now())
+  createdAt DateTime @default(now())
+
+  member   User   @relation(fields: [memberId], references: [id])
+  memberId String
+  mess     Mess   @relation(fields: [messId], references: [id])
+  messId   String
+
+  @@index([memberId])
+  @@index([messId])
+  @@map("deposits")
+}

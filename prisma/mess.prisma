@@ -13,6 +13,7 @@ model Mess {
   meals     Meal[]
   bazaars   Bazaar[]
   bills     MonthlyBill[]
+  deposits  Deposit[]
 
   @@map("messes")
 }
