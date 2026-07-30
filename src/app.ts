@@ -80,7 +80,8 @@ app.get('/api/health', (req: Request, res: Response) => {
   const uptimeString = `${uptimeHours}h ${uptimeMinutes}m ${uptimeSeconds}s`;
 
   res.status(200).json({ 
-    status: 'ok', 
+    status: 'ok',
+    message: '🚀 MessMate Backend is running perfectly! All systems go.',
     timestamp: new Date().toISOString(),
     uptime: process.uptime(),
     uptimeFormatted: uptimeString
