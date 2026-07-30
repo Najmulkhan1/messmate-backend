@@ -1,0 +1,159 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  ADMIN
+  MANAGER
+  MEMBER
+}
+
+enum MealType {
+  LUNCH
+  DINNER
+}
+
+enum BillStatus {
+  PENDING
+  GENERATED
+  SENT
+  PAID
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+}
+
+enum PaymentMethod {
+  CASH
+  BKASH
+  NAGAD
+  ROCKET
+  BANK_TRANSFER
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  name      String
+  phone     String?
+  avatar    String?
+  role      Role     @default(MEMBER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  mess       Mess?    @relation(fields: [messId], references: [id])
+  messId     String?
+  meals      Meal[]
+  bazaars    Bazaar[]
+  payments   Payment[]
+  managedMess Mess[]  @relation("MessManager")
+
+  @@map("users")
+}
+
+model Mess {
+  id          String   @id @default(uuid())
+  name        String
+  address     String?
+  rentAmount  Decimal  @default(0) @db.Decimal(10, 2)
+  utilityCost Decimal  @default(0) @db.Decimal(10, 2)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  manager     User     @relation("MessManager", fields: [managerId], references: [id])
+  managerId   String
+  members     User[]
+  meals       Meal[]
+  bazaars     Bazaar[]
+  bills       MonthlyBill[]
+
+  @@map("messes")
+}
+
+model Meal {
+  id         String    @id @default(uuid())
+  date       DateTime  @db.Date
+  type       MealType
+  status     Boolean   @default(false)
+  guestCount Int       @default(0)
+  createdAt  DateTime  @default(now())
+
+  member    User      @relation(fields: [memberId], references: [id])
+  memberId  String
+  mess      Mess      @relation(fields: [messId], references: [id])
+  messId    String
+
+  @@unique([date, type, memberId])
+  @@index([date])
+  @@index([messId])
+  @@map("meals")
+}
+
+model Bazaar {
+  id          String   @id @default(uuid())
+  date        DateTime @db.Date
+  items       String
+  amount      Decimal  @db.Decimal(10, 2)
+  description String?
+  createdAt   DateTime @default(now())
+
+  buyer     User     @relation(fields: [buyerId], references: [id])
+  buyerId   String
+  mess      Mess     @relation(fields: [messId], references: [id])
+  messId    String
+
+  @@index([date])
+  @@index([messId])
+  @@map("bazaars")
+}
+
+model MonthlyBill {
+  id          String      @id @default(uuid())
+  month       Int
+  year        Int
+  rent        Decimal     @db.Decimal(10, 2)
+  utilities   Decimal     @db.Decimal(10, 2)
+  totalBazaar Decimal     @db.Decimal(10, 2)
+  totalMeals  Int
+  mealRate    Decimal     @db.Decimal(10, 2)
+  totalAmount Decimal     @db.Decimal(10, 2)
+  status      BillStatus  @default(PENDING)
+  pdfUrl      String?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  mess      Mess      @relation(fields: [messId], references: [id])
+  messId    String
+  payments  Payment[]
+
+  @@unique([month, year, messId])
+  @@index([messId])
+  @@map("monthly_bills")
+}
+
+model Payment {
+  id          String        @id @default(uuid())
+  amount      Decimal       @db.Decimal(10, 2)
+  method      PaymentMethod @default(CASH)
+  status      PaymentStatus @default(PENDING)
+  verifiedBy  String?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  member    User        @relation(fields: [memberId], references: [id])
+  memberId  String
+  bill      MonthlyBill @relation(fields: [billId], references: [id])
+  billId    String
+
+  @@index([memberId])
+  @@index([billId])
+  @@map("payments")
+}
