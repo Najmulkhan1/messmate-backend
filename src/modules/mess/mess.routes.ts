@@ -9,6 +9,7 @@ const router: Router = Router();
 // Protect all mess routes
 router.use(authenticate);
 
+router.get('/available', messController.getAvailableMesses);
 router.post('/', validateRequest(createMessSchema), messController.createMess);
 router.get('/me', messController.getMyMess);
 router.patch('/me', validateRequest(updateMessSchema), messController.updateMess);

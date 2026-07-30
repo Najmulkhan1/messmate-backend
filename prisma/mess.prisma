@@ -2,6 +2,9 @@ model Mess {
   id          String   @id @default(uuid())
   name        String
   address     String?
+  division    String?
+  district    String?
+  subDistrict String?
   rentAmount  Decimal  @default(0) @db.Decimal(10, 2)
   utilityCost Decimal  @default(0) @db.Decimal(10, 2)
   createdAt   DateTime @default(now())
@@ -14,6 +17,7 @@ model Mess {
   bazaars   Bazaar[]
   bills     MonthlyBill[]
   deposits  Deposit[]
+  joinRequests JoinRequest[]
 
   @@map("messes")
 }

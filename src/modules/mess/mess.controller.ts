@@ -30,6 +30,22 @@ export const getMyMess = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+export const getAvailableMesses = catchAsync(async (req: Request, res: Response) => {
+  const { division, district, subDistrict, search } = req.query;
+
+  const messes = await messService.getAvailableMesses({
+    division: division as string | undefined,
+    district: district as string | undefined,
+    subDistrict: subDistrict as string | undefined,
+    search: search as string | undefined,
+  });
+
+  res.status(200).json({
+    status: 'success',
+    data: { messes },
+  });
+});
+
 export const updateMess = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
   const userId = req.user!.userId;
   const user = await prisma.user.findUnique({ where: { id: userId } });

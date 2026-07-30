@@ -129,6 +129,8 @@ export const refreshToken = catchAsync(async (req: Request, res: Response) => {
       },
     });
   } catch (err) {
+    res.clearCookie('accessToken');
+    res.clearCookie('refreshToken');
     return res.status(401).json({ message: 'Invalid refresh token' });
   }
 });

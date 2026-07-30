@@ -19,6 +19,7 @@ model User {
   deposits      Deposit[]
   notifications Notification[]
   managedMess   Mess[]         @relation("MessManager")
+  joinRequests  JoinRequest[]
 
   @@map("users")
 }

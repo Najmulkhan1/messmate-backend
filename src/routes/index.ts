@@ -42,6 +42,7 @@ import paymentRoutes from '../modules/payment/payment.routes';
 import dashboardRoutes from '../modules/dashboard/dashboard.routes';
 import depositRoutes from '../modules/deposit/deposit.routes';
 import notificationRoutes from '../modules/notification/notification.routes';
+import joinRequestRoutes from '../modules/joinRequest/joinRequest.routes';
 
 // API Routes
 router.use('/api/auth', authRoutes);
@@ -54,5 +55,6 @@ router.use('/api/payments', paymentRoutes);
 router.use('/api/dashboard', dashboardRoutes);
 router.use('/api/deposits', depositRoutes);
 router.use('/api/notifications', notificationRoutes);
+router.use('/api/join-requests', joinRequestRoutes);
 
 export default router;
