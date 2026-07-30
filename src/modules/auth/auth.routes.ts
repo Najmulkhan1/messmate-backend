@@ -7,7 +7,7 @@ import { authLimiter } from '../../middleware/rate-limiter';
 
 const router = Router();
 
-router.use(authLimiter);
+// router.use(authLimiter);
 
 router.post('/register', validateRequest(registerSchema), authController.register);
 router.post('/login', validateRequest(loginSchema), authController.login);

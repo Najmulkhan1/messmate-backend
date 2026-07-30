@@ -6,10 +6,10 @@ import morgan from 'morgan';
 import dotenv from 'dotenv';
 import sanitizeHtml from 'sanitize-html';
 
+dotenv.config();
+
 import routes from './routes';
 import { generalLimiter } from './middleware/rate-limiter';
-
-dotenv.config();
 
 const app: Express = express();
 

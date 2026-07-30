@@ -1,0 +1,16 @@
+import { Router } from 'express';
+import * as messController from './mess.controller';
+import { validateRequest } from '../../middleware/validate-request';
+import { createMessSchema, updateMessSchema } from './mess.validation';
+import { authenticate } from '../../middleware/auth.middleware';
+
+const router = Router();
+
+// Protect all mess routes
+router.use(authenticate);
+
+router.post('/', validateRequest(createMessSchema), messController.createMess);
+router.get('/me', messController.getMyMess);
+router.patch('/me', validateRequest(updateMessSchema), messController.updateMess);
+
+export default router;
