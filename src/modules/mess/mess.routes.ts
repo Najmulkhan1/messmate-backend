@@ -4,7 +4,7 @@ import { validateRequest } from '../../middleware/validate-request';
 import { createMessSchema, updateMessSchema } from './mess.validation';
 import { authenticate } from '../../middleware/auth.middleware';
 
-const router = Router();
+const router: Router = Router();
 
 // Protect all mess routes
 router.use(authenticate);

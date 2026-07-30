@@ -5,7 +5,7 @@ import { registerSchema, loginSchema } from './auth.validation';
 import { authenticate } from '../../middleware/auth.middleware';
 import { authLimiter } from '../../middleware/rate-limiter';
 
-const router = Router();
+const router: Router = Router();
 
 // router.use(authLimiter);
 

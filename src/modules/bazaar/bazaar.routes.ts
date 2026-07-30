@@ -4,7 +4,7 @@ import { validateRequest } from '../../middleware/validate-request';
 import { addBazaarSchema, updateBazaarSchema } from './bazaar.validation';
 import { authenticate } from '../../middleware/auth.middleware';
 
-const router = Router();
+const router: Router = Router();
 
 // Protect all bazaar routes
 router.use(authenticate);

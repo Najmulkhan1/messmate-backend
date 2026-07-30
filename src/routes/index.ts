@@ -5,7 +5,7 @@ import memberRoutes from '../modules/member/member.routes';
 import mealRoutes from '../modules/meal/meal.routes';
 import bazaarRoutes from '../modules/bazaar/bazaar.routes';
 
-const router = Router();
+const router: Router = Router();
 
 router.get('/', (req: Request, res: Response) => {
   res.send(`
@@ -38,7 +38,7 @@ router.get('/api/health', (req: Request, res: Response) => {
 });
 
 import billRoutes from '../modules/bill/bill.routes';
-
+import paymentRoutes from '../modules/payment/payment.routes';
 // API Routes
 router.use('/api/auth', authRoutes);
 router.use('/api/mess', messRoutes);
@@ -46,5 +46,6 @@ router.use('/api/members', memberRoutes);
 router.use('/api/meals', mealRoutes);
 router.use('/api/bazaars', bazaarRoutes);
 router.use('/api/bills', billRoutes);
+router.use('/api/payments', paymentRoutes);
 
 export default router;

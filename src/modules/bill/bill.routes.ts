@@ -4,7 +4,7 @@ import { validateRequest } from '../../middleware/validate-request';
 import { generateBillSchema } from './bill.validation';
 import { authenticate } from '../../middleware/auth.middleware';
 
-const router = Router();
+const router: Router = Router();
 
 router.use(authenticate);
 
