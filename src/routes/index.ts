@@ -1,6 +1,8 @@
 import { Router, Request, Response } from 'express';
 import authRoutes from '../modules/auth/auth.routes';
 import messRoutes from '../modules/mess/mess.routes';
+import memberRoutes from '../modules/member/member.routes';
+import mealRoutes from '../modules/meal/meal.routes';
 
 const router = Router();
 
@@ -37,5 +39,7 @@ router.get('/api/health', (req: Request, res: Response) => {
 // API Routes
 router.use('/api/auth', authRoutes);
 router.use('/api/mess', messRoutes);
+router.use('/api/members', memberRoutes);
+router.use('/api/meals', mealRoutes);
 
 export default router;

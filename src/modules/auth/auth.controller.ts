@@ -112,7 +112,7 @@ export const refreshToken = catchAsync(async (req: Request, res: Response) => {
     const newAccessToken = jwt.sign(
       payload,
       process.env.JWT_SECRET || 'super-secret-jwt-key-min-32-chars',
-      { expiresIn: process.env.JWT_EXPIRES_IN || '15m' }
+      { expiresIn: (process.env.JWT_EXPIRES_IN || '15m') as any }
     );
 
     res.cookie('accessToken', newAccessToken, {
