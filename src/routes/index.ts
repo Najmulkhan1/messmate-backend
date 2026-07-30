@@ -37,11 +37,14 @@ router.get('/api/health', (req: Request, res: Response) => {
   });
 });
 
+import billRoutes from '../modules/bill/bill.routes';
+
 // API Routes
 router.use('/api/auth', authRoutes);
 router.use('/api/mess', messRoutes);
 router.use('/api/members', memberRoutes);
 router.use('/api/meals', mealRoutes);
 router.use('/api/bazaars', bazaarRoutes);
+router.use('/api/bills', billRoutes);
 
 export default router;
