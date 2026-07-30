@@ -3,8 +3,15 @@ import { catchAsync } from '../../utils/catchAsync';
 import * as authService from './auth.service';
 import jwt from 'jsonwebtoken';
 
-const setTokenCookie = (res: Response, token: string) => {
-  res.cookie('refreshToken', token, {
+const setCookies = (res: Response, accessToken: string, refreshToken: string) => {
+  res.cookie('accessToken', accessToken, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'strict',
+    maxAge: 15 * 60 * 1000, // 15 mins
+  });
+
+  res.cookie('refreshToken', refreshToken, {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'strict',
@@ -15,7 +22,7 @@ const setTokenCookie = (res: Response, token: string) => {
 export const register = catchAsync(async (req: Request, res: Response) => {
   const { user, accessToken, refreshToken } = await authService.registerUser(req.body);
   
-  setTokenCookie(res, refreshToken);
+  setCookies(res, accessToken, refreshToken);
 
   res.status(201).json({
     status: 'success',
@@ -35,7 +42,7 @@ export const register = catchAsync(async (req: Request, res: Response) => {
 export const login = catchAsync(async (req: Request, res: Response) => {
   const { user, accessToken, refreshToken } = await authService.loginUser(req.body);
 
-  setTokenCookie(res, refreshToken);
+  setCookies(res, accessToken, refreshToken);
 
   res.status(200).json({
     status: 'success',
@@ -54,6 +61,7 @@ export const login = catchAsync(async (req: Request, res: Response) => {
 });
 
 export const logout = catchAsync(async (req: Request, res: Response) => {
+  res.clearCookie('accessToken');
   res.clearCookie('refreshToken');
   res.status(200).json({ status: 'success', message: 'Logged out successfully' });
 });
@@ -106,6 +114,13 @@ export const refreshToken = catchAsync(async (req: Request, res: Response) => {
       process.env.JWT_SECRET || 'super-secret-jwt-key-min-32-chars',
       { expiresIn: process.env.JWT_EXPIRES_IN || '15m' }
     );
+
+    res.cookie('accessToken', newAccessToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 15 * 60 * 1000,
+    });
 
     res.status(200).json({
       status: 'success',
