@@ -1,0 +1,10 @@
+allowBuilds:
+  '@prisma/engines': true
+  '@scarf/scarf': true
+  bcrypt: true
+  msgpackr-extract: true
+  prisma: true
+minimumReleaseAgeExclude:
+  - '@bull-board/api@8.4.0'
+  - '@bull-board/express@8.4.0'
+  - '@bull-board/ui@8.4.0'
