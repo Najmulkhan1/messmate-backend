@@ -1,5 +1,13 @@
 node_modules
 # Keep environment variables out of version control
-.env
 
 /src/generated/prisma
+
+# Environment variables & secrets (added by GitHub Guardian)
+*.env
+!.env.example
+!.env.sample
+.envrc
+.venv/
+venv/
+config.bat

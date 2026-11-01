@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "tsx watch src/server.ts",
+    "dev": "node init && tsx watch src/server.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -47,6 +47,7 @@
     "jsonwebtoken": "^9.0.3",
     "morgan": "^1.11.0",
     "node-cron": "^4.6.0",
+    "node-fetch": "^3.3.2",
     "pdfkit": "^0.19.1",
     "pg": "^8.22.0",
     "rate-limit-redis": "^6.0.0",
